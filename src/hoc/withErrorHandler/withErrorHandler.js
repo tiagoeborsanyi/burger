@@ -6,7 +6,8 @@ import Aux from '../Aux/Aux';
 const withErrorHandler = (WrapperComponent, axios) => {
     return class extends Component {
         state = {
-            error: null
+            error: null,
+            show: false
         }
 
         componentDidMount () {
@@ -15,13 +16,15 @@ const withErrorHandler = (WrapperComponent, axios) => {
                 return req;
             });
             axios.interceptors.response.use(res => res, error => {
-                console.log(error)
-                this.setState({error: error});
+                // this.setState({error: error});
+                if (error) {
+                    this.setState({show: true, error: error})
+                }
             });
         }
 
         errorConfirmedHandler = () => {
-            this.setState({error: null})
+            this.setState({show: false})
         }
 
         render() {
@@ -29,8 +32,8 @@ const withErrorHandler = (WrapperComponent, axios) => {
                 <Aux>
                     <Modal 
                         modalClosed={this.errorConfirmedHandler}
-                        show={this.state.error}>
-                        {this.state.error ? this.state.error : null}
+                        show={this.state.show}>
+                        {this.state.show ? this.state.error.message : null}
                     </Modal>
                     <WrapperComponent {...this.props} />
                 </Aux>
