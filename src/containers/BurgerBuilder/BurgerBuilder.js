@@ -88,39 +88,32 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = async () => {
+        this.props.history.push('/checkout');
         // alert('continue!!');
-        this.setState({loading: true});
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Tiago Emerick',
-                address: {
-                    street: 'NY5569',
-                    zipCode: '1546546',
-                    country: 'Brasil'
-                },
-                email: 'tiago@test.com'
-            },
-            deliveryMethod: 'fastest'
-        }
-        axios.post('/orders.json', order)
-            .then(response => {
-                console.log(response);
-                this.setState({loading: false, purchasing: false});
-            })
-            .catch(error => {
-                console.log(error);
-                this.setState({loading: false, purchasing: false});
-            });
-        // try {
-        //     const response = await axios.post('/orders.json4', order);
-        //     console.log(response);
-        //     this.setState({loading: false, purchasing: false});
-        // } catch (error) {
-        //     console.log(error);
-        //     this.setState({loading: false, purchasing: false});
+        // this.setState({loading: true});
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         name: 'Tiago Emerick',
+        //         address: {
+        //             street: 'NY5569',
+        //             zipCode: '1546546',
+        //             country: 'Brasil'
+        //         },
+        //         email: 'tiago@test.com'
+        //     },
+        //     deliveryMethod: 'fastest'
         // }
+        // axios.post('/orders.json', order)
+        //     .then(response => {
+        //         console.log(response);
+        //         this.setState({loading: false, purchasing: false});
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //         this.setState({loading: false, purchasing: false});
+        //     });
     }
 
     render () {
