@@ -9,10 +9,11 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (authData) => {
+export const authSuccess = (token, userId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        authData: authData
+        token: token,
+        userId: userId
     };
 };
 
@@ -38,11 +39,10 @@ export const auth = (email, password, isSignup) => {
         axios.post(url, authData)
             .then(response => {
                 console.log(response);
-                dispatch(authSuccess(response.data));
+                dispatch(authSuccess(response.data.idToken, response.data.localId));
             })
             .catch(err => {
-                console.log(err);
-                dispatch(authFail(err));
+                dispatch(authFail(err.response.data.error));
             });
         // Auth google
         // https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=[API_KEY]
