@@ -23,7 +23,7 @@ export const authFail = (error) => {
     };
 };
 
-export const auth = (email, password) => {
+export const auth = (email, password, isSignup) => {
     return dispatch => {
         dispatch(authStart());
         const authData = {
@@ -31,8 +31,11 @@ export const auth = (email, password) => {
             password,
             returnSecureToken: true
         };
-        console.log(API_KEY)
-        axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`, authData)
+        let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
+        if (!isSignup) {
+            url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`
+        }
+        axios.post(url, authData)
             .then(response => {
                 console.log(response);
                 dispatch(authSuccess(response.data));
@@ -40,6 +43,11 @@ export const auth = (email, password) => {
             .catch(err => {
                 console.log(err);
                 dispatch(authFail(err));
-            })
+            });
+        // Auth google
+        // https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=[API_KEY]
+        // curl 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=[API_KEY]' \
+        // -H 'Content-Type: application/json' \
+        // --data-binary '{"postBody":"id_token=[GOOGLE_ID_TOKEN]&providerId=[google.com]","requestUri":"[http://localhost]","returnIdpCredential":true,"returnSecureToken":true}'
     };
 };
